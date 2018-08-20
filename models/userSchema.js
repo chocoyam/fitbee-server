@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 const sequelize = new Sequelize('fitbee', 'fitbee', 'fitbee',  
     {
-        'host': '',
+        'host': '13.124.65.48',
         'dialect': 'mysql'
     });
 
