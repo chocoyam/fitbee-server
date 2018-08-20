@@ -21,7 +21,7 @@ const upload = multer({ dest: 'userImage/'});
 var port = 3000;
 var database = require('mysql');
 const dbConfig = {
-   host: 'localhost',
+   host: '13.124.65.48',
    user: 'fitbee',
    password: 'fitbee',
    port: 3306,
