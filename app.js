@@ -16,12 +16,12 @@ app.use(bodyParser.json())
 app.use(cookieParser())
 
 const multer = require('multer');
-const upload = multer({ dest: 'userImage/'});
+const faceupload = multer({ dest: './pyFiles/faces/'});
 
 var port = 3000;
 var database = require('mysql');
 const dbConfig = {
-   host: '13.124.65.48',
+   host: '',
    user: 'fitbee',
    password: 'fitbee',
    port: 3306,
@@ -32,8 +32,7 @@ const conn = database.createConnection(dbConfig);
 
 //setting routes
 var user = require('./routes/user.js');
-app.get('/user/:userId', user.getMain);
-app.post('/user', upload.array('image'), user.getUserId);
+app.post('/user', faceupload.array('image'), user.getUserId);
 
 
 // start server

@@ -3,37 +3,20 @@ var pythonShell = require('python-shell');
 const Users = require('../models/userSchema.js').Users;
 
 exports.getUserId = function(req, res){
-    console.log('>>>user.js/getUserId');
-    console.log(req.files);
-
-    // var pyOption = {
-    //     mode : 'text',
-    //     pythonPath: '',
-    //     pythonOptions: ['-u'],
-    //     scriptPath: './pyFiles',
-    //     args: []
-    // }
-    pythonShell.run('./pyFiles/classification.py', function (err) {
+    console.log('>>>>>user.js/getUserId');
+    pythonShell.run('./pyFiles/classification.py', function (err, results) {
         if (err) throw err;
-        console.log('finished');
-    });
+        userId = parseInt(results[0])
 
-
-    res.send(req.files);
-};
-
-
-exports.getMain = function(req, res){
-    console.log('user.js/getMain');
-    console.log(req.params);
-    Users.findOne({ where : {userId : parseInt(req.params.userId)}})
-    .then( results => {
-        res.send({
-            userId : results.userId,
-            userName : results.userName
+        console.log('login : ' + userId);
+        Users.findAll({
+            where: { userId : userId }
+        })
+        .then((data) => {
+            res.send(data[0]);
+        }, error => {
+            console.log(error)
+            res.send({ msg : 'fail' });
         });
-    }, error => {
-        next(error);
     });
 };
-
