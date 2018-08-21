@@ -1,12 +1,12 @@
 var pythonShell = require('python-shell');
 require('date-utils');
+var now = new Date().toFormat('YYYY-MM-DD');
 
 const Users = require('../models/userSchema.js').Users;
 const Inbody_data = require('../models/userSchema.js').Inbody_data;
 const Change_inbody = require('../models/userSchema.js').Change_inbody;
 const Body_pic = require('../models/userSchema.js').Body_pic;
 
-var now = new Date().toFormat('YYYY-MM-DD');
 
 
 exports.getUserId = function(req, res){
@@ -44,6 +44,12 @@ exports.getInbody = function(req, res){
 };
 
 
+/*
+*** updateInbody 모듈 ***
+1. (DB에 저장된 변화량 데이터 + 새로운 인바디 데이터 - DB에 저장된 인바디 데이터)
+    구해서 Change_inbody에 추가
+2. Inbody_data 테이블 업데이트
+*/
 exports.updateInbody = function(req, res){
     var updateData;
     //get old inbody data from Inbody_data
@@ -94,15 +100,17 @@ exports.getChange = function(req, res){
     console.log('>>>>>user.js/getChange, params.id : ' + req.params.id);
     
     Change_inbody.findAll({
-        where : { userId : req.params.id }
+        where : { userId : req.params.id },
+        order: [['date', 'DESC']]
     })
     .then(data => {
-        res.send(data[0]);
+        res.send(data);
     }, error => {
         console.log(error);
         res.status(500).json({msg : 'db fail'});
     });
 };
+
 
 exports.getBodyPic = function(req, res){
     console.log('>>>>>user.js/getBodyPic, params.id : ' + req.params.id);
@@ -120,8 +128,9 @@ exports.getBodyPic = function(req, res){
     });
 };
 
-exports.addBodyPic = function(req, res){
 
+exports.addBodyPic = function(req, res){
+    
 };
 
 exports.addUser = function(req, res){
