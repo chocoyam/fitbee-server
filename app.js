@@ -17,11 +17,12 @@ app.use(cookieParser())
 
 const multer = require('multer');
 const faceupload = multer({ dest: './pyFiles/faces/'});
+const bodyupload = multer({ dest: './bodypic/'});
 
 var port = 3000;
 var database = require('mysql');
 const dbConfig = {
-   host: '',
+   host: '13.124.65.48',
    user: 'fitbee',
    password: 'fitbee',
    port: 3306,
@@ -34,9 +35,11 @@ const conn = database.createConnection(dbConfig);
 var user = require('./routes/user.js');
 app.post('/user', faceupload.array('image'), user.getUserId);
 app.get('/user/inbody/:id', user.getInbody);
+app.put('/user/inbody/:id', user.updateInbody);
 app.get('/user/change/:id', user.getChange);
 app.get('/user/bodypic/:id', user.getBodyPic);
-
+app.post('/user/bodypic/:id', bodyupload.array('image'), user.addBodyPic);
+app.post('/user/new', faceupload.array('image'), user.addUser);
 
 // start server
 conn.connect( (err) => {

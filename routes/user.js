@@ -1,9 +1,13 @@
 var pythonShell = require('python-shell');
-var async = require('async');
+require('date-utils');
 
 const Users = require('../models/userSchema.js').Users;
 const Inbody_data = require('../models/userSchema.js').Inbody_data;
 const Change_inbody = require('../models/userSchema.js').Change_inbody;
+const Body_pic = require('../models/userSchema.js').Body_pic;
+
+var now = new Date().toFormat('YYYY-MM-DD');
+
 
 exports.getUserId = function(req, res){
     console.log('>>>>>user.js/getUserId');
@@ -39,7 +43,54 @@ exports.getInbody = function(req, res){
     });
 };
 
-exports.getChange = async function(req, res){
+
+exports.updateInbody = function(req, res){
+    var updateData;
+    //get old inbody data from Inbody_data
+    Inbody_data.findAll({
+        where : { userId : req.params.id }
+    })
+    .then(data => {
+        var old = data[0]['dataValues'];
+        //get standard data from Change_inbody
+        Change_inbody.findAll({
+            where : { userId : req.params.id },
+            order: [['date', 'DESC']]
+        })
+        .then(data => {
+            var standard = data[0];
+            //add data to Change_inbody
+            Change_inbody.create({
+                userId : req.params.id,
+                weight : standard['weight'] + req.body.weight - old['weight'],
+                muscle : standard['muscle'] + req.body.muscle - old['muscle'],
+                fat : standard['fat'] + req.body.fat - old['fat'],
+                date : now
+            })
+        })
+
+        //update Inbody_data
+        Inbody_data.update({
+            weight : req.body.weight,
+            muscle : req.body.muscle,
+            fat : req.body.muscle,
+            bmi : req.body.bmi,
+            fat_percent : req.body.fat_percent,
+            date : now
+        },{
+            where : { userId : req.params.id }
+        })
+
+        res.status(200).json({msg : 'success'});
+
+    }, error => {
+        console.log(error);
+        res.status(500).json({msg : 'db fail'});
+    });
+};
+
+
+exports.getChange = function(req, res){
     console.log('>>>>>user.js/getChange, params.id : ' + req.params.id);
     
     Change_inbody.findAll({
@@ -51,10 +102,28 @@ exports.getChange = async function(req, res){
         console.log(error);
         res.status(500).json({msg : 'db fail'});
     });
-    
-}
+};
 
-exports.getBodyPic = async function(req, res){
-    console.log('>>>>>user.js/getBodyPic');
+exports.getBodyPic = function(req, res){
+    console.log('>>>>>user.js/getBodyPic, params.id : ' + req.params.id);
     
-}
+    Body_pic.findAll({
+        attributes : ['pic', 'date'],
+        where : { userId : req.params.id },
+        order: [['date', 'DESC']]
+    })
+    .then(data => {
+        res.send(data);
+    }, error => {
+        console.log(error);
+        res.status(500).json({msg : 'db fail'});
+    });
+};
+
+exports.addBodyPic = function(req, res){
+
+};
+
+exports.addUser = function(req, res){
+    console.log('>>>>>user.js/addUser');
+};

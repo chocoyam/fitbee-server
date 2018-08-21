@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 const sequelize = new Sequelize('fitbee', 'fitbee', 'fitbee',  
     {
-        'host': '',
+        'host': '13.124.65.48',
         'dialect': 'mysql'
     });
 
@@ -24,7 +24,8 @@ const Inbody_data = sequelize.define('Inbody_data', {
     muscle : { type : Sequelize.FLOAT, allowNull : false },
     fat : { type : Sequelize.FLOAT, allowNull : false },
     bmi : { type : Sequelize.FLOAT, allowNull : false },
-    fat_percent : { type : Sequelize.FLOAT, allowNull : false }
+    fat_percent : { type : Sequelize.FLOAT, allowNull : false },
+    date : { type : Sequelize.DATE, allowNull : false }
  }, {timestamps:false});
 
  const Change_inbody = sequelize.define('Change_inbody', {
@@ -35,8 +36,14 @@ const Inbody_data = sequelize.define('Inbody_data', {
     date : { type : Sequelize.DATE, allowNull : false }
  }, {freezeTableName: true, timestamps:false});
 
-
+const Body_pic = sequelize.define('Body_pic', {
+    picId : { type : Sequelize.INTEGER(11), primaryKey:true},
+    userId : { type : Sequelize.INTEGER(11), references: {model: Users, key: 'userId'}},
+    pic : {  type : Sequelize.STRING(100), allowNull : false },
+    date : { type : Sequelize.DATE, allowNull : false }
+}, {freezeTableName: true, timestamps:false});
  
 module.exports.Users = Users;
 module.exports.Inbody_data = Inbody_data;
 module.exports.Change_inbody = Change_inbody;
+module.exports.Body_pic = Body_pic;
