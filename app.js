@@ -21,7 +21,7 @@ const faceupload = multer({ dest: './pyFiles/faces/'});
 var port = 3000;
 var database = require('mysql');
 const dbConfig = {
-   host: '',
+   host: '13.124.65.48',
    user: 'fitbee',
    password: 'fitbee',
    port: 3306,
@@ -33,6 +33,9 @@ const conn = database.createConnection(dbConfig);
 //setting routes
 var user = require('./routes/user.js');
 app.post('/user', faceupload.array('image'), user.getUserId);
+app.get('/user/inbody/:id', user.getInbody);
+app.get('/user/change/:id', user.getChange);
+app.get('/user/bodypic/:id', user.getBodyPic);
 
 
 // start server
