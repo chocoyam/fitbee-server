@@ -33,7 +33,7 @@ const Inbody_data = sequelize.define('Inbody_data', {
     muscle : { type : Sequelize.FLOAT, allowNull : false },
     fat : { type : Sequelize.FLOAT, allowNull : false },
     date : { type : Sequelize.DATE, allowNull : false }
- }, {timestamps:false});
+ }, {freezeTableName: true, timestamps:false});
 
 
  
