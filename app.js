@@ -21,7 +21,7 @@ const faceupload = multer({ dest: './pyFiles/faces/'});
 var port = 3000;
 var database = require('mysql');
 const dbConfig = {
-   host: '13.124.65.48',
+   host: '',
    user: 'fitbee',
    password: 'fitbee',
    port: 3306,
