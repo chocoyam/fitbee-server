@@ -2,6 +2,8 @@ require('date-utils');
 var now = new Date().toFormat('YYYY-MM-DD');
 var pythonShell = require('python-shell');
 var imgUpload = require('./s3/imgUpload');
+var fs = require('fs');
+var training = require('./training.js');
 
 const Users = require('../models/userSchema.js').Users;
 const Inbody_data = require('../models/userSchema.js').Inbody_data;
@@ -13,7 +15,7 @@ const Body_pic = require('../models/userSchema.js').Body_pic;
 exports.getUserId = function(req, res){
     console.log('>>>>>user.js/getUserId');
     //execute python module
-    pythonShell.run('./pyFiles/classification.py', function (err, results) {
+    pythonShell.run('./pyFiles/classification.py', function (err, results){
         if (err) throw err;
         //db work & send res
         console.log('login : ' + results[0]);
@@ -151,6 +153,69 @@ exports.addBodyPic = async function(req, res){
     });
 };
 
-exports.addUser = function(req, res){
-    console.log('>>>>>user.js/addUser');
+
+exports.addUserDb = function(req, res){
+    console.log('>>>>>user.js/addUserDb');
+
+    Users.create({
+        userName : req.body.userName,
+        gender : req.body.gender,
+        ph_number : req.body.ph_number,
+        weak_part : req.body.weak_part,
+        concent_part : req.body.concent_part,
+        goal_weight : req.body.goal_weight,
+        goal_fat : req.body.goal_fat,
+        goal_muscle : req.body.goal_muscle
+    })
+    .then(data => {
+        Inbody_data.create({
+            userId : data['dataValues']['userId'],
+            weight : 0,
+            muscle : 0,
+            fat : 0,
+            bmi : 0,
+            fat_percent : 0,
+            date : now,
+        });
+
+        Change_inbody.create({
+            userId : data['dataValues']['userId'],
+            weight : 0,
+            muscle : 0,
+            fat : 0,
+            date : now,
+        });
+
+        res.status(200).json({msg : 'success', userId : data['dataValues']['userId']});
+        console.log(data['dataValues']['userId']);
+    }, error => {
+        console.log(error);
+        res.status(500).json({msg : 'db fail'});
+    });
+};
+
+
+exports.addUserModel = async function(req, res){
+    console.log('>>>>>user.js/addUserModel, params.id : ' + req.params.id);
+
+    // var images = req.files;
+    // console.log(images);
+
+    // //create member directory & move face images
+    // dir = './pyFiles/members/' + req.params.id + '/';
+    // fs.mkdir(dir, function (err) {
+    //     if(err){ console.error(err) }
+    //     else{
+    //         //rename(move) images file
+    //         for(var i=0 ; i < images.length ; i++) {
+    //             fs.rename(images[i].path, dir+'face'+i, function (err) {
+    //                 if (err) throw err
+    //             })
+    //         }
+    //     }
+    // });
+
+    training.train()
+
+    //make classifier model
 };
