@@ -9,10 +9,10 @@ import openface
 import openface.helper
 from openface.data import iterImgs
 
-args = argparse.Namespace(dlibFacePredictor='pyFiles/shape_predictor_68_face_landmarks.dat', 
-fallbackLfw=None, inputDir='pyFiles/members/', 
+args = argparse.Namespace(dlibFacePredictor='./pyFiles/shape_predictor_68_face_landmarks.dat', 
+fallbackLfw=None, inputDir='./pyFiles/members/', 
 landmarks='outerEyesAndNose', mode='align', 
-outputDir='pyFiles/', size=96, 
+outputDir='./pyFiles/', size=96, 
 skipMulti=False, verbose=False)
 
 print(args)
