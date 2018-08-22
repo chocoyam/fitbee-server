@@ -10,9 +10,11 @@
   "license": "ISC",
   "dependencies": {
     "async": "^2.6.1",
+    "aws-sdk": "^2.298.0",
     "body-parser": "^1.18.3",
     "cookie-parser": "^1.4.3",
     "date-utils": "^1.2.21",
+    "easyimage": "^3.1.0",
     "errorhandler": "^1.5.0",
     "express": "^4.16.3",
     "http": "0.0.0",

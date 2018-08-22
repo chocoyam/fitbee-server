@@ -22,7 +22,7 @@ const bodyupload = multer({ dest: './bodypic/'});
 var port = 3000;
 var database = require('mysql');
 const dbConfig = {
-   host: '',
+   host: '13.124.65.48',
    user: 'fitbee',
    password: 'fitbee',
    port: 3306,

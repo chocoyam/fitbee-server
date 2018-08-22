@@ -1,6 +1,7 @@
-var pythonShell = require('python-shell');
 require('date-utils');
 var now = new Date().toFormat('YYYY-MM-DD');
+var pythonShell = require('python-shell');
+var imgUpload = require('./s3/imgUpload');
 
 const Users = require('../models/userSchema.js').Users;
 const Inbody_data = require('../models/userSchema.js').Inbody_data;
@@ -129,8 +130,25 @@ exports.getBodyPic = function(req, res){
 };
 
 
-exports.addBodyPic = function(req, res){
-    
+exports.addBodyPic = async function(req, res){
+    console.log('>>>>>user.js/addBodyPic, params.id : ' + req.params.id);
+    var image = req.files;
+
+    var url = await imgUpload.upload(image, 'Body_pic', req.params.id);
+    console.log(url);
+
+    //add Body_pic
+    Body_pic.create({
+        userId : req.params.id,
+        pic : url[0],
+        date : now,
+    })
+    .then(data => {
+        res.status(200).json({msg : 'success'});
+    }, error => {
+        console.log(error);
+        res.status(500).json({msg : 'db fail'});
+    });
 };
 
 exports.addUser = function(req, res){
