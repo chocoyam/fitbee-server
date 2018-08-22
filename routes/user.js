@@ -3,7 +3,7 @@ var now = new Date().toFormat('YYYY-MM-DD');
 var pythonShell = require('python-shell');
 var imgUpload = require('./s3/imgUpload');
 var fs = require('fs');
-var training = require('./training.js');
+var shell = require('shelljs');
 
 const Users = require('../models/userSchema.js').Users;
 const Inbody_data = require('../models/userSchema.js').Inbody_data;
@@ -154,8 +154,11 @@ exports.addBodyPic = async function(req, res){
 };
 
 
-exports.addUserDb = function(req, res){
-    console.log('>>>>>user.js/addUserDb');
+exports.addUser = function(req, res){
+    console.log('>>>>>user.js/addUser');
+
+    var images = req.files;
+    console.log(images);
 
     Users.create({
         userName : req.body.userName,
@@ -186,6 +189,23 @@ exports.addUserDb = function(req, res){
             date : now,
         });
 
+        //create member directory & move face images
+        dir = './pyFiles/members/' + req.params.id + '/';
+        fs.mkdir(dir, function (err) {
+            if(err){ console.error(err) }
+            else{
+                //rename(move) images file
+                for(var i=0 ; i < images.length ; i++) {
+                    fs.rename(images[i].path, dir + 'face' + i + '.png', function (err) {
+                        if (err) throw err
+                    })
+                }
+            }
+        });
+
+        //model train
+        shell.exec('sh ./pyFiles/train.sh', function() { });
+
         res.status(200).json({msg : 'success', userId : data['dataValues']['userId']});
         console.log(data['dataValues']['userId']);
     }, error => {
@@ -195,27 +215,14 @@ exports.addUserDb = function(req, res){
 };
 
 
-exports.addUserModel = async function(req, res){
-    console.log('>>>>>user.js/addUserModel, params.id : ' + req.params.id);
-
-    // var images = req.files;
-    // console.log(images);
-
-    // //create member directory & move face images
-    // dir = './pyFiles/members/' + req.params.id + '/';
-    // fs.mkdir(dir, function (err) {
-    //     if(err){ console.error(err) }
-    //     else{
-    //         //rename(move) images file
-    //         for(var i=0 ; i < images.length ; i++) {
-    //             fs.rename(images[i].path, dir+'face'+i, function (err) {
-    //                 if (err) throw err
-    //             })
-    //         }
-    //     }
-    // });
-
-    training.train()
-
-    //make classifier model
-};
+exports.test = function(req, res){
+    try{
+        shell.exec('sh ./pyFiles/train.sh', function() {
+            
+        });
+    }
+    catch(err){
+        console.log(err);
+        res.status(300).json({msg : 'server error'});
+    }
+}

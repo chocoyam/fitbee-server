@@ -34,7 +34,7 @@ paths.dofile('dataset.lua')
 paths.dofile('batch-represent.lua')
 
 --model = torch.load(opt.model)
-model = torch.load('./nn4.small2.v1.ascii.t7','ascii')
+model = torch.load('./pyFiles/nn4.small2.v1.t7')
 model:evaluate()
 if opt.cuda then
    model:cuda()

@@ -90,15 +90,15 @@ def infer(args, multiple=False):
             
 
 if __name__ == '__main__':
-    files = os.listdir('./pyFiles/faces')
+    files = os.listdir('./faces')
     maxConf = 0
     maxName = ""
 
     for file in files :
-        args = argparse.Namespace(classifierModel='./pyFiles/classifier.pkl', 
-        cuda=False, dlibFacePredictor='./pyFiles/shape_predictor_68_face_landmarks.dat', 
-        imgDim=96, imgs=['./pyFiles/faces/'+file], mode='infer', multi=False, 
-        networkModel='./pyFiles/nn4.small2.v1.t7', verbose=False)
+        args = argparse.Namespace(classifierModel='./classifier.pkl', 
+        cuda=False, dlibFacePredictor='./shape_predictor_68_face_landmarks.dat', 
+        imgDim=96, imgs=['./faces/'+file], mode='infer', multi=False, 
+        networkModel='./nn4.small2.v1.t7', verbose=False)
 
         result = infer(args)
 

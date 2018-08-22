@@ -39,8 +39,8 @@ app.put('/user/inbody/:id', user.updateInbody);
 app.get('/user/change/:id', user.getChange);
 app.get('/user/bodypic/:id', user.getBodyPic);
 app.post('/user/bodypic/:id', bodyupload.array('image'), user.addBodyPic);
-app.post('/adduser/db', user.addUserDb);
-app.post('/adduser/model/:id', faceupload.array('image'), user.addUserModel);
+app.post('/user/new', faceupload.array('image'), user.addUser);
+app.get('/test', user.test);
 
 // start server
 conn.connect( (err) => {

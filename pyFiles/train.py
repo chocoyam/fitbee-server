@@ -46,10 +46,10 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.naive_bayes import GaussianNB
 
 args = argparse.Namespace(classifier='LinearSvm', cuda=False, 
-    dlibFacePredictor='./shape_predictor_68_face_landmarks.dat',
+    dlibFacePredictor='./pyFiles/shape_predictor_68_face_landmarks.dat',
     imgDim=96, ldaDim=-1, mode='train', 
-    networkModel='./nn4.small2.v1.t7', 
-    verbose=False, workDir='./embed/')
+    networkModel='./pyFiles/nn4.small2.v1.t7', 
+    verbose=False, workDir='./pyFiles/')
 
 def train(args):
     print("train call")
