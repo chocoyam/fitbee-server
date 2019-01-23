@@ -1,0 +1,32 @@
+{
+  "name": "fitbee-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "async": "^2.6.1",
+    "aws-sdk": "^2.298.0",
+    "body-parser": "^1.18.3",
+    "cookie-parser": "^1.4.3",
+    "date-utils": "^1.2.21",
+    "easyimage": "^3.1.0",
+    "errorhandler": "^1.5.0",
+    "express": "^4.16.3",
+    "http": "0.0.0",
+    "luanode-runtime": "^0.1.0",
+    "multer": "^1.3.1",
+    "mysql": "^2.15.0",
+    "mysql2": "^1.5.3",
+    "nodeml": "^0.4.0",
+    "path": "^0.12.7",
+    "python-shell": "^0.5.0",
+    "sequelize": "^4.38.0",
+    "serve-static": "^1.13.2",
+    "shelljs": "^0.8.2"
+  }
+}
